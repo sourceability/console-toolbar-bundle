@@ -1,0 +1,23 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Sourceability\ConsoleToolbarBundle\Console\ProfilerToolbarRenderer:
+        public: true # For behat extension DI
+        arguments:
+            $profiler: '@?profiler'
+            $router: '@router'
+            $templates: '%data_collector.templates%'
+            $hiddenPanels: [] # Replaced by DI Extension
+            $maxColumnWidth: 30  # Replaced by DI Extension
+
+    Sourceability\ConsoleToolbarBundle\Profiler\RecentProfileLoader:
+        public: true # For behat extension DI
+        arguments:
+            $profiler: '@?profiler'
+            $profilerStorage: '@?profiler.storage'
+
+    Sourceability\ConsoleToolbarBundle\EventListener\ConsoleToolbarListener:
+        tags:
+            - { name: 'kernel.event_subscriber' }
