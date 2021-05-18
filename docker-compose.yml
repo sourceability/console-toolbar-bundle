@@ -9,3 +9,5 @@ services:
         volumes:
             - '.:/usr/src/app'
         command: 'tail -f /dev/null'
+        environment:
+            PHP_EXTENSIONS: 'intl pdo_sqlite'

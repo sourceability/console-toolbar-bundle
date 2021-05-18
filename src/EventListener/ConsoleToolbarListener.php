@@ -11,24 +11,17 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use function count;
 
 /**
- * This adds a new global option: --toolbar
- * When running a command with --toolbar, the ascii toolbar will be displayed on stderr.
+ * This adds a new global option: --toolbar When running a command with --toolbar, the ascii toolbar will be displayed
+ * on stderr.
  */
 class ConsoleToolbarListener implements EventSubscriberInterface
 {
-    public static function getSubscribedEvents()
-    {
-        return [
-            ConsoleEvents::COMMAND => 'onCommand',
-            ConsoleEvents::TERMINATE => 'onTerminate',
-        ];
-    }
-
     private ProfilerToolbarRenderer $toolbarRenderer;
+
     private RecentProfileLoader $recentProfileLoader;
+
     private KernelInterface $kernel;
 
     public function __construct(
@@ -39,6 +32,14 @@ class ConsoleToolbarListener implements EventSubscriberInterface
         $this->toolbarRenderer = $toolbarRenderer;
         $this->recentProfileLoader = $recentProfileLoader;
         $this->kernel = $kernel;
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return [
+            ConsoleEvents::COMMAND => 'onCommand',
+            ConsoleEvents::TERMINATE => 'onTerminate',
+        ];
     }
 
     public function onCommand(ConsoleCommandEvent $event): void
@@ -62,7 +63,8 @@ class ConsoleToolbarListener implements EventSubscriberInterface
         );
 
         $definitions = [
-            $command->getApplication()->getDefinition(),
+            $command->getApplication()
+                ->getDefinition(),
             $command->getDefinition(), // because \Symfony\Component\Console\Command\Command::mergeApplicationDefinition has already been called
         ];
         foreach ($definitions as $definition) {
@@ -83,7 +85,7 @@ class ConsoleToolbarListener implements EventSubscriberInterface
 
         $profiles = $this->recentProfileLoader->loadSince((int) $this->kernel->getStartTime());
 
-        if (count($profiles) < 1) {
+        if (\count($profiles) < 1) {
             // kind of weird, maybe deserves an error/exception ?
             return;
         }

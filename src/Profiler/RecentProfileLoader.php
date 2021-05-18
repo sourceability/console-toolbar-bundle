@@ -4,8 +4,6 @@ namespace Sourceability\ConsoleToolbarBundle\Profiler;
 
 use Symfony\Component\HttpKernel\Profiler\Profile;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
-use Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface;
-use function count;
 
 class RecentProfileLoader
 {
@@ -17,8 +15,6 @@ class RecentProfileLoader
     }
 
     /**
-     * @param int|null $startTimestamp
-     *
      * @return Profile[]
      */
     public function loadSince(?int $startTimestamp): array
@@ -59,6 +55,6 @@ class RecentProfileLoader
 
         $newProfiles = $this->profiler->find('', '', (string) 100, '', $startTimestamp, '');
 
-        return count($newProfiles);
+        return \count($newProfiles);
     }
 }

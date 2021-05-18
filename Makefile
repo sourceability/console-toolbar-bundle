@@ -33,5 +33,13 @@ yamllint: ## Lints yaml files
 phpstan: ## Static analysis
 	$(EXEC_PHP) phpstan
 
+.PHONY: cs
+cs: ## Coding standards check
+	$(EXEC_PHP) ecs check
+
+.PHONY: cs
+cs-fix: ## Coding standards fix
+	$(EXEC_PHP) ecs check --fix
+
 .PHONY: all
-all: phpstan yamllint ## Runs all test/lint targets
+all: phpstan yamllint cs ## Runs all test/lint targets

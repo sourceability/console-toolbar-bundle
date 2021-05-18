@@ -11,8 +11,11 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
-class ConsoleToolbarExtension
-    extends KernelTestCase // easiest way to get a kernel instance
+/**
+ * @internal
+ * @coversNothing
+ */
+final class ConsoleToolbarExtension extends KernelTestCase // easiest way to get a kernel instance
     implements BeforeTestHook, AfterTestHook
 {
     private ?int $lastProfileTimestamp = null;
@@ -23,6 +26,7 @@ class ConsoleToolbarExtension
     private array $profileTokensShown = [];
 
     private bool $alwaysShow;
+
     private int $indentSpaces;
 
     public function __construct(bool $alwaysShow = true, int $indent = 4)
@@ -51,20 +55,24 @@ class ConsoleToolbarExtension
 
         $kernel = self::bootKernel();
 
-        $recentProfileLoader = $kernel->getContainer()->get('sourceability.console_toolbar.profiler.recent_profile_loader');
-        $profilerToolbarRenderer = $kernel->getContainer()->get('sourceability.console_toolbar.console.profiler_toolbar_renderer');
+        $recentProfileLoader = $kernel->getContainer()
+            ->get('sourceability.console_toolbar.profiler.recent_profile_loader')
+        ;
+        $profilerToolbarRenderer = $kernel->getContainer()
+            ->get('sourceability.console_toolbar.console.profiler_toolbar_renderer')
+        ;
 
-        assert($recentProfileLoader instanceof RecentProfileLoader);
-        assert($profilerToolbarRenderer instanceof ProfilerToolbarRenderer);
+        \assert($recentProfileLoader instanceof RecentProfileLoader);
+        \assert($profilerToolbarRenderer instanceof ProfilerToolbarRenderer);
 
         $profiles = $recentProfileLoader->loadSince($this->lastProfileTimestamp);
 
         $profiles = array_filter(
             $profiles,
-            fn (Profile $newProfile) => !in_array($newProfile->getToken(), $this->profileTokensShown, true)
+            fn (Profile $newProfile) => !\in_array($newProfile->getToken(), $this->profileTokensShown, true)
         );
 
-        if (count($profiles) > 0) {
+        if (\count($profiles) > 0) {
             $output = self::createIndentedOutput($this->indentSpaces);
             $output->writeln(''); // make sure the table is fully displayed/aligned
 
@@ -72,10 +80,7 @@ class ConsoleToolbarExtension
         }
 
         foreach ($profiles as $profile) {
-            $this->lastProfileTimestamp = max(
-                $this->lastProfileTimestamp ?? 0,
-                $profile->getTime()
-            );
+            $this->lastProfileTimestamp = max($this->lastProfileTimestamp ?? 0, $profile->getTime());
             $this->profileTokensShown[] = $profile->getToken();
         }
 

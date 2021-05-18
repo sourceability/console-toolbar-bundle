@@ -14,43 +14,26 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class SymfonyProfilerExtension implements ExtensionInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'sourceability_instrumentation';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config): void
     {
-        $definition = new Definition(ProfilerToolbarListener::class, [
-            new Reference(SymfonyExtension::KERNEL_ID),
-        ]);
+        $definition = new Definition(ProfilerToolbarListener::class, [new Reference(SymfonyExtension::KERNEL_ID)]);
         $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG);
         $container->setDefinition(ProfilerToolbarListener::class, $definition);
     }
