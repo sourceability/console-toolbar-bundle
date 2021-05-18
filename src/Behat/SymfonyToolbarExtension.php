@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class SymfonyProfilerExtension implements ExtensionInterface
+class SymfonyToolbarExtension implements ExtensionInterface
 {
     public function process(ContainerBuilder $container): void
     {
@@ -20,7 +20,7 @@ class SymfonyProfilerExtension implements ExtensionInterface
 
     public function getConfigKey()
     {
-        return 'sourceability_instrumentation';
+        return 'sourceability_symfony_toolbar';
     }
 
     public function initialize(ExtensionManager $extensionManager): void

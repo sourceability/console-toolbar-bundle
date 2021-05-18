@@ -57,7 +57,7 @@ First enable the behat extension by adding the following to your behat configura
 ```yaml
 default:
     extensions:
-        Sourceability\ConsoleToolbarBundle\Behat\SymfonyProfilerExtension: ~
+        Sourceability\ConsoleToolbarBundle\Behat\SymfonyToolbarExtension: ~
 ```
 
 This will display the console toolbar whenever a new symfony profile is detected:
