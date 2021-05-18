@@ -16,7 +16,7 @@ class SourceabilityConsoleToolbarExtension extends ConfigurableExtension
         $loader->load('services.yaml');
 
         $container
-            ->getDefinition(ProfilerToolbarRenderer::class)
+            ->getDefinition('sourceability.console_toolbar.console.profiler_toolbar_renderer')
             ->replaceArgument('$hiddenPanels', $mergedConfig['toolbar']['hidden_panels'])
             ->replaceArgument('$maxColumnWidth', $mergedConfig['toolbar']['max_column_width'])
         ;
