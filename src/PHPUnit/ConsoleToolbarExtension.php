@@ -4,11 +4,10 @@ namespace Sourceability\ConsoleToolbarBundle\PHPUnit;
 
 use PHPUnit\Runner\AfterTestHook;
 use PHPUnit\Runner\BeforeTestHook;
+use Sourceability\ConsoleToolbarBundle\Console\IndentedConsoleOutput;
 use Sourceability\ConsoleToolbarBundle\Console\ProfilerToolbarRenderer;
 use Sourceability\ConsoleToolbarBundle\Profiler\RecentProfileLoader;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
 /**
@@ -18,16 +17,25 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 final class ConsoleToolbarExtension extends KernelTestCase // easiest way to get a kernel instance
     implements BeforeTestHook, AfterTestHook
 {
-    private ?int $lastProfileTimestamp = null;
+    /**
+     * @var int|null
+     */
+    private $lastProfileTimestamp;
 
     /**
      * @var array<string>
      */
-    private array $profileTokensShown = [];
+    private $profileTokensShown = [];
 
-    private bool $alwaysShow;
+    /**
+     * @var bool
+     */
+    private $alwaysShow;
 
-    private int $indentSpaces;
+    /**
+     * @var int
+     */
+    private $indentSpaces;
 
     public function __construct(bool $alwaysShow = true, int $indent = 4)
     {
@@ -69,11 +77,13 @@ final class ConsoleToolbarExtension extends KernelTestCase // easiest way to get
 
         $profiles = array_filter(
             $profiles,
-            fn (Profile $newProfile) => !\in_array($newProfile->getToken(), $this->profileTokensShown, true)
+            function (Profile $newProfile): bool {
+                return !\in_array($newProfile->getToken(), $this->profileTokensShown, true);
+            }
         );
 
         if (\count($profiles) > 0) {
-            $output = self::createIndentedOutput($this->indentSpaces);
+            $output = new IndentedConsoleOutput($this->indentSpaces);
             $output->writeln(''); // make sure the table is fully displayed/aligned
 
             $profilerToolbarRenderer->render($output, $profiles);
@@ -85,28 +95,5 @@ final class ConsoleToolbarExtension extends KernelTestCase // easiest way to get
         }
 
         self::ensureKernelShutdown(); // make sure we don't interfere with WebTestCase as the kernel is shared
-    }
-
-    private static function createIndentedOutput(int $spaces = 0): OutputInterface
-    {
-        return new class($spaces) extends ConsoleOutput {
-            private int $spaces;
-
-            public function __construct(int $spaces)
-            {
-                parent::__construct();
-
-                $this->spaces = $spaces;
-            }
-
-            protected function doWrite(string $message, bool $newline): void
-            {
-                $prependBy = str_repeat(' ', $this->spaces);
-
-                $message = $prependBy . $message;
-
-                parent::doWrite($message, $newline);
-            }
-        };
     }
 }

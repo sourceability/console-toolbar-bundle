@@ -7,7 +7,10 @@ use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 class RecentProfileLoader
 {
-    private ?Profiler $profiler;
+    /**
+     * @var Profiler|null
+     */
+    private $profiler;
 
     public function __construct(?Profiler $profiler)
     {

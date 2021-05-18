@@ -29,25 +29,40 @@ use function usort;
 
 class ProfilerToolbarRenderer
 {
-    private Router $router;
+    /**
+     * @var Router
+     */
+    private $router;
 
-    private Profiler $profiler;
+    /**
+     * @var Profiler
+     */
+    private $profiler;
 
-    private Environment $twig;
+    /**
+     * @var Environment
+     */
+    private $twig;
 
-    private RequestContext $originalRouterContext;
+    /**
+     * @var RequestContext
+     */
+    private $originalRouterContext;
 
     /**
      * @var array<mixed>
      */
-    private array $templates;
+    private $templates;
 
     /**
      * @var array<string>
      */
-    private array $hiddenPanels;
+    private $hiddenPanels;
 
-    private int $maxColumnWidth;
+    /**
+     * @var int
+     */
+    private $maxColumnWidth;
 
     /**
      * @param array<mixed>  $templates
