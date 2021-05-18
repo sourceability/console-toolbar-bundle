@@ -1,8 +1,10 @@
 # sourceability/console-toolbar-bundle
 
+Renders the profiler toolbar in your terminal.
+
 ## Installation
 
-Run
+Install the bundle using composer:
 
 ```sh
 $ composer require --dev sourceability/console-toolbar-bundle
@@ -32,24 +34,18 @@ sourceability_console_toolbar:
             - logger
 ```
 
-## Usage
+By default, the profiler does not always run in the `test` environment.
+You can enable it like this:
 
-`bin/console` now has a new global option `--toolbar`:
+```diff
+--- a/config/packages/test/web_profiler.yaml
++++ b/config/packages/test/web_profiler.yaml
+@@ -3,4 +3,4 @@ web_profiler:
+     intercept_redirects: false
 
-```
-# bin/console cache:warmup --toolbar
-
- // Warming up the cache for the dev environment with debug true
-
-
- [OK] Cache for the "dev" environment (debug=true) was successfully warmed.
-
-
-┌─────────┬───────────────┬─────────┬─────────┬─────────────────┬──────────┬────────┬───────────────┐
-│ Type    │ Name          │ request │ time    │ cache           │ security │ twig   │ elasticsearch │
-├─────────┼───────────────┼─────────┼─────────┼─────────────────┼──────────┼────────┼───────────────┤
-│ COMMAND │ /cache:warmup │ 200     │ 7609 ms │ 566 in 30.26 ms │ n/a      │ n/a ms │ 0             │
-└─────────┴───────────────┴─────────┴─────────┴─────────────────┴──────────┴────────┴───────────────┘
+ framework:
+-    profiler: { collect: false }
++    profiler: { only_exceptions: false }
 ```
 
 ## Behat
@@ -66,47 +62,29 @@ default:
 
 This will display the console toolbar whenever a new symfony profile is detected:
 
-```
-# behat -vvv features/api.feature
-Feature:
+<img width="1375" alt="Screen Shot 2021-05-18 at 17 52 13" src="https://user-images.githubusercontent.com/611271/118683608-cf759600-b801-11eb-98b5-715df3d26452.png">
 
-  @db
-  Scenario: Reverting a manual stock transaction is not possible
-┌─────────┬──────────────────────────────┬─────────┬─────────┬──────────┬────────┬───────────────┬─────────────────────┬────────────────────┐
-│ Type    │ Name                         │ request │ time    │ security │ twig   │ elasticsearch │ eight_points_guzzle │ db                 │
-├─────────┼──────────────────────────────┼─────────┼─────────┼──────────┼────────┼───────────────┼─────────────────────┼────────────────────┤
-│ COMMAND │ /doctrine:database:drop      │ 200     │ 1447 ms │ n/a      │ n/a ms │ 0             │                     │                    │
-├─────────┼──────────────────────────────┼─────────┼─────────┼──────────┼────────┼───────────────┼─────────────────────┼────────────────────┤
-│ COMMAND │ /doctrine:database:create    │ 200     │ 1485 ms │ n/a      │ n/a ms │ 0             │                     │                    │
-├─────────┼──────────────────────────────┼─────────┼─────────┼──────────┼────────┼───────────────┼─────────────────────┼────────────────────┤
-│ COMMAND │ /doctrine:migrations:migrate │ 200     │ 4841 ms │ n/a      │ n/a ms │ 0             │                     │ 2542 in 1312.73 ms │
-└─────────┴──────────────────────────────┴─────────┴─────────┴──────────┴────────┴───────────────┴─────────────────────┴────────────────────┘
-    Given the fixtures "api/offer_stock_transactions_manual.yml" are loaded
-    When I am authenticating as api client Default with a valid JWT
-    And the "Content-Type" request header contains "application/json"
-    And I request "/api/offer-stock-transactions/1/revert" using HTTP POST
-┌──────┬────────────────────────────────┬────────────────────────────────┬────────┬─────────────────┬────────────────────────────────┬────────┬──────────────┬───────────────┐
-│ Type │ Name                           │ request                        │ time   │ cache           │ security                       │ twig   │ db           │ elasticsearch │
-├──────┼────────────────────────────────┼────────────────────────────────┼────────┼─────────────────┼────────────────────────────────┼────────┼──────────────┼───────────────┤
-│ POST │ /api/offer-stock-transactions/ │ 405 POST @ app_api_offerstockt │ 425 ms │ 604 in 15.63 ms │ 0b13e52d-b058-32fb-8507-10dec6 │ n/a ms │ 5 in 6.54 ms │ 0             │
-│      │ 1/revert                       │ ransaction_revertstocktransact │        │                 │ 34a07c                         │        │              │               │
-│      │                                │ ion                            │        │                 │                                │        │              │               │
-└──────┴────────────────────────────────┴────────────────────────────────┴────────┴─────────────────┴────────────────────────────────┴────────┴──────────────┴───────────────┘
-    Then the response code is 405
-    When I am authenticating as api client Default with a valid JWT
-    And the "Content-Type" request header contains "application/json"
-    And I request "/api/offer-stock-transactions/2/revert" using HTTP POST
-┌──────┬────────────────────────────────┬────────────────────────────────┬────────┬─────────────────┬────────────────────────────────┬────────┬──────────────┬───────────────┐
-│ Type │ Name                           │ request                        │ time   │ cache           │ security                       │ twig   │ db           │ elasticsearch │
-├──────┼────────────────────────────────┼────────────────────────────────┼────────┼─────────────────┼────────────────────────────────┼────────┼──────────────┼───────────────┤
-│ POST │ /api/offer-stock-transactions/ │ 405 POST @ app_api_offerstockt │ 378 ms │ 604 in 11.01 ms │ 0b13e52d-b058-32fb-8507-10dec6 │ n/a ms │ 4 in 4.75 ms │ 0             │
-│      │ 2/revert                       │ ransaction_revertstocktransact │        │                 │ 34a07c                         │        │              │               │
-│      │                                │ ion                            │        │                 │                                │        │              │               │
-└──────┴────────────────────────────────┴────────────────────────────────┴────────┴─────────────────┴────────────────────────────────┴────────┴──────────────┴───────────────┘
-    Then the response code is 405
+## PHPUnit
 
-7 profiles collected, Open profile list
-1 scenario (1 passed)
-9 steps (9 passed)
-0m8.39s (96.13Mb)
+Add the following to your `phpunit.xml` configuration:
+
 ```
+    <extensions>
+        <extension class="Sourceability\ConsoleToolbarBundle\PHPUnit\ConsoleToolbarExtension">
+            <arguments>
+                <boolean>false</boolean> <!-- always show, if false use: TOOLBAR=true phpunit ...-->
+                <integer>4</integer> <!-- Indentation -->
+            </arguments>
+        </extension>
+    </extensions>
+```
+
+<img width="1242" alt="Screen Shot 2021-05-18 at 17 46 52" src="https://user-images.githubusercontent.com/611271/118682929-321a6200-b801-11eb-8390-90e2c7056c95.png">
+
+## Console
+
+`bin/console` now has a new global option `--toolbar`:
+
+<img width="1242" alt="Screen Shot 2021-05-18 at 18 02 22" src="https://user-images.githubusercontent.com/611271/118685271-3f385080-b803-11eb-95f0-7d68c0e96857.png">
+
+Note that this won't work without a library we will later release.
