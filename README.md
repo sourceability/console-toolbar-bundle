@@ -68,7 +68,7 @@ This will display the console toolbar whenever a new symfony profile is detected
 
 Add the following to your `phpunit.xml` configuration:
 
-```
+```xml
     <extensions>
         <extension class="Sourceability\ConsoleToolbarBundle\PHPUnit\ConsoleToolbarExtension">
             <arguments>
