@@ -15,12 +15,6 @@ class SourceabilityConsoleToolbarExtension extends ConfigurableExtension
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');
 
-        if (!$mergedConfig['toolbar']['enabled']) {
-            $container->removeDefinition(ProfilerToolbarRenderer::class);
-
-            return;
-        }
-
         $container
             ->getDefinition(ProfilerToolbarRenderer::class)
             ->replaceArgument('$hiddenPanels', $mergedConfig['toolbar']['hidden_panels'])
