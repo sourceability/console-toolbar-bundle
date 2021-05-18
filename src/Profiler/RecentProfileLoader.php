@@ -10,12 +10,10 @@ use function count;
 class RecentProfileLoader
 {
     private ?Profiler $profiler;
-    private ?ProfilerStorageInterface $profilerStorage;
 
-    public function __construct(?Profiler $profiler, ?ProfilerStorageInterface $profilerStorage)
+    public function __construct(?Profiler $profiler)
     {
         $this->profiler = $profiler;
-        $this->profilerStorage = $profilerStorage;
     }
 
     /**
@@ -25,13 +23,11 @@ class RecentProfileLoader
      */
     public function loadSince(?int $startTimestamp): array
     {
-        if (null === $this->profiler
-            || null === $this->profilerStorage
-        ) {
+        if (null === $this->profiler) {
             return [];
         }
 
-        $newProfiles = $this->profilerStorage->find('', '', 100, '', $startTimestamp);
+        $newProfiles = $this->profiler->find('', '', (string) 100, '', $startTimestamp, '');
 
         $profiles = [];
         foreach ($newProfiles as $newProfile) {
@@ -49,13 +45,11 @@ class RecentProfileLoader
 
     public function countSince(?int $startTimestamp): int
     {
-        if (null === $this->profiler
-            || null === $this->profilerStorage
-        ) {
+        if (null === $this->profiler) {
             return 0;
         }
 
-        $newProfiles = $this->profilerStorage->find('', '', 100, '', $startTimestamp);
+        $newProfiles = $this->profiler->find('', '', (string) 100, '', $startTimestamp, '');
 
         return count($newProfiles);
     }
