@@ -1,6 +1,19 @@
 .PHONY: help
 .DEFAULT_GOAL := help
 
+EXEC_YAMLLINT = yamllint
+ifeq (, $(shell which -s yamllint))
+	EXEC_YAMLLINT = docker run --rm $$(tty -s && echo "-it" || echo) -v $(PWD):/data cytopia/yamllint:1.26
+endif
+
+COMPOSE_EXEC ?=
+
+# Prefix any command that should be run within the fpm docker container with $(EXEC_FPM)
+EXEC_PHP = docker-compose exec php
+ifeq (, $(shell which docker-compose))
+	EXEC_PHP =
+endif
+
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
@@ -10,13 +23,15 @@ docker-sh: ## Starts a bash session in the php container
 
 .PHONY: docker-up
 docker-up: ## Start Docker containers
-	docker-compose up --detach --build
-
-EXEC_YAMLLINT = yamllint
-ifeq (, $(shell which -s yamllint))
-	EXEC_YAMLLINT = docker run --rm $$(tty -s && echo "-it" || echo) -v $(PWD):/data cytopia/yamllint:1.26
-endif
+	docker-compose up --detach --build --remove-orphans
 
 .PHONY: yamllint
-yamllint:
+yamllint: ## Lints yaml files
 	$(EXEC_YAMLLINT) -c .yamllint.yaml --strict .
+
+.PHONY: phpstan
+phpstan: ## Static analysis
+	$(EXEC_PHP) phpstan
+
+.PHONY: all
+all: phpstan yamllint ## Runs all test/lint targets

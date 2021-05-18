@@ -2,7 +2,10 @@ version: '3'
 
 services:
     php:
-        image: 'thecodingmachine/php:${DEV_PHP_VERSION}-v4-cli'
+        build:
+            context: '.'
+            args:
+                PHP_VERSION: '${DEV_PHP_VERSION}'
         volumes:
             - '.:/usr/src/app'
         command: 'tail -f /dev/null'

@@ -27,6 +27,10 @@ class RecentProfileLoader
             return [];
         }
 
+        if (null !== $startTimestamp) {
+            $startTimestamp = (string) $startTimestamp;
+        }
+
         $newProfiles = $this->profiler->find('', '', (string) 100, '', $startTimestamp, '');
 
         $profiles = [];
@@ -47,6 +51,10 @@ class RecentProfileLoader
     {
         if (null === $this->profiler) {
             return 0;
+        }
+
+        if (null !== $startTimestamp) {
+            $startTimestamp = (string) $startTimestamp;
         }
 
         $newProfiles = $this->profiler->find('', '', (string) 100, '', $startTimestamp, '');

@@ -4,6 +4,8 @@ namespace Sourceability\ConsoleToolbarBundle\PHPUnit;
 
 use PHPUnit\Runner\AfterTestHook;
 use PHPUnit\Runner\BeforeTestHook;
+use Sourceability\ConsoleToolbarBundle\Console\ProfilerToolbarRenderer;
+use Sourceability\ConsoleToolbarBundle\Profiler\RecentProfileLoader;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -52,6 +54,9 @@ class ConsoleToolbarExtension
         $recentProfileLoader = $kernel->getContainer()->get('sourceability.console_toolbar.profiler.recent_profile_loader');
         $profilerToolbarRenderer = $kernel->getContainer()->get('sourceability.console_toolbar.console.profiler_toolbar_renderer');
 
+        assert($recentProfileLoader instanceof RecentProfileLoader);
+        assert($profilerToolbarRenderer instanceof ProfilerToolbarRenderer);
+
         $profiles = $recentProfileLoader->loadSince($this->lastProfileTimestamp);
 
         $profiles = array_filter(
@@ -60,7 +65,7 @@ class ConsoleToolbarExtension
         );
 
         if (count($profiles) > 0) {
-            $output = $this->getIndentedOutput($this->indentSpaces);
+            $output = self::createIndentedOutput($this->indentSpaces);
             $output->writeln(''); // make sure the table is fully displayed/aligned
 
             $profilerToolbarRenderer->render($output, $profiles);
@@ -77,7 +82,7 @@ class ConsoleToolbarExtension
         self::ensureKernelShutdown(); // make sure we don't interfere with WebTestCase as the kernel is shared
     }
 
-    private static function getIndentedOutput(int $spaces = 0): OutputInterface
+    private static function createIndentedOutput(int $spaces = 0): OutputInterface
     {
         return new class($spaces) extends ConsoleOutput {
             private int $spaces;
@@ -89,7 +94,7 @@ class ConsoleToolbarExtension
                 $this->spaces = $spaces;
             }
 
-            protected function doWrite(string $message, bool $newline)
+            protected function doWrite(string $message, bool $newline): void
             {
                 $prependBy = str_repeat(' ', $this->spaces);
 

@@ -50,9 +50,17 @@ class ProfilerToolbarListener implements EventSubscriberInterface
 
     public function __construct(KernelInterface $kernel)
     {
-        $this->recentProfileLoader = $kernel->getContainer()->get('sourceability.console_toolbar.profiler.recent_profile_loader');
-        $this->profilerToolbarRenderer = $kernel->getContainer()->get('sourceability.console_toolbar.console.profiler_toolbar_renderer');
-        $this->router = $kernel->getContainer()->get('router');
+        $recentProfileLoader = $kernel->getContainer()->get('sourceability.console_toolbar.profiler.recent_profile_loader');
+        $profilerToolbarRenderer = $kernel->getContainer()->get('sourceability.console_toolbar.console.profiler_toolbar_renderer');
+        $router = $kernel->getContainer()->get('router');
+
+        assert($recentProfileLoader instanceof RecentProfileLoader);
+        assert($profilerToolbarRenderer instanceof ProfilerToolbarRenderer);
+        assert($router instanceof Router);
+
+        $this->recentProfileLoader = $recentProfileLoader;
+        $this->profilerToolbarRenderer = $profilerToolbarRenderer;
+        $this->router = $router;
         $this->originalRouterContext = clone $this->router->getContext(); // clone is important here, we're making a copy
     }
 

@@ -9,7 +9,9 @@ parameters:
         - src/
         - tests/
 
+    ignoreErrors:
+        - '#Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::#'
+
 includes:
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon
-# Call to an undefined method Symfony\Component\Config\Definition\Builder\NodeDefinition::

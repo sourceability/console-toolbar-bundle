@@ -1,6 +1,6 @@
 services:
     sourceability.console_toolbar.console.profiler_toolbar_renderer:
-        class: Sourceability\ConsoleToolbarBundle\Console\ProfilerToolbarRenderer
+        class: 'Sourceability\ConsoleToolbarBundle\Console\ProfilerToolbarRenderer'
         public: true # For behat extension DI
         arguments:
             $router: '@router'
@@ -11,13 +11,13 @@ services:
             $maxColumnWidth: 30  # Replaced by DI Extension
 
     sourceability.console_toolbar.profiler.recent_profile_loader:
-        class: Sourceability\ConsoleToolbarBundle\Profiler\RecentProfileLoader
+        class: 'Sourceability\ConsoleToolbarBundle\Profiler\RecentProfileLoader'
         public: true # For behat extension DI
         arguments:
             $profiler: '@?profiler'
 
     sourceability.console_toolbar.event_listener.console_toolbar_listener:
-        class: Sourceability\ConsoleToolbarBundle\EventListener\ConsoleToolbarListener
+        class: 'Sourceability\ConsoleToolbarBundle\EventListener\ConsoleToolbarListener'
         arguments:
             $toolbarRenderer: '@sourceability.console_toolbar.console.profiler_toolbar_renderer'
             $recentProfileLoader: '@sourceability.console_toolbar.profiler.recent_profile_loader'
