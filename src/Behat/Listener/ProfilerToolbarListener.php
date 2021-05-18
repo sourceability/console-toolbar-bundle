@@ -20,22 +20,40 @@ use function time;
 
 class ProfilerToolbarListener implements EventSubscriberInterface
 {
-    private RecentProfileLoader $recentProfileLoader;
+    /**
+     * @var RecentProfileLoader
+     */
+    private $recentProfileLoader;
 
-    private ProfilerToolbarRenderer $profilerToolbarRenderer;
+    /**
+     * @var ProfilerToolbarRenderer
+     */
+    private $profilerToolbarRenderer;
 
-    private Router $router;
+    /**
+     * @var Router
+     */
+    private $router;
 
-    private RequestContext $originalRouterContext;
+    /**
+     * @var RequestContext
+     */
+    private $originalRouterContext;
 
-    private ?int $beforeScenarioTimestamp = null;
+    /**
+     * @var int|null
+     */
+    private $beforeScenarioTimestamp;
 
-    private ?int $lastProfileTimestamp = null;
+    /**
+     * @var int|null
+     */
+    private $lastProfileTimestamp;
 
     /**
      * @var array<string>
      */
-    private array $profileTokensShown = [];
+    private $profileTokensShown = [];
 
     public function __construct(KernelInterface $kernel)
     {
@@ -82,7 +100,9 @@ class ProfilerToolbarListener implements EventSubscriberInterface
 
         $profiles = array_filter(
             $profiles,
-            fn (Profile $newProfile) => !\in_array($newProfile->getToken(), $this->profileTokensShown, true)
+            function (Profile $newProfile): bool {
+                return !\in_array($newProfile->getToken(), $this->profileTokensShown, true);
+            }
         );
 
         if (\count($profiles) > 0) {

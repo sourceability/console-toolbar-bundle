@@ -18,11 +18,20 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class ConsoleToolbarListener implements EventSubscriberInterface
 {
-    private ProfilerToolbarRenderer $toolbarRenderer;
+    /**
+     * @var ProfilerToolbarRenderer
+     */
+    private $toolbarRenderer;
 
-    private RecentProfileLoader $recentProfileLoader;
+    /**
+     * @var RecentProfileLoader
+     */
+    private $recentProfileLoader;
 
-    private KernelInterface $kernel;
+    /**
+     * @var KernelInterface
+     */
+    private $kernel;
 
     public function __construct(
         ProfilerToolbarRenderer $toolbarRenderer,
