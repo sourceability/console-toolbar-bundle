@@ -5,7 +5,7 @@ Render the symfony profiler toolbar in your terminal.
 <img width="1375" alt="Screen Shot 2021-05-18 at 17 52 13" src="https://user-images.githubusercontent.com/611271/118683608-cf759600-b801-11eb-98b5-715df3d26452.png">
 
 Each panel links to the corresponding web profiler page.
-Make sure to use a [terminal that support hyperlinks](hyperlink_terminals) to leverage this feature.
+Make sure to use a [terminal that support hyperlinks][hyperlink_terminals] to leverage this feature.
 
 ## Installation
 
