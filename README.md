@@ -21,7 +21,7 @@ Enable the bundle by updating `config/bundles.php`:
 return [
     Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
     // ...
-
+    FriendsOfBehat\SymfonyExtension\Bundle\FriendsOfBehatSymfonyExtensionBundle::class => ['dev' => true, 'test' => true],
     Sourceability\ConsoleToolbarBundle\SourceabilityConsoleToolbarBundle::class => ['dev' => true, 'test' => true],
 ];
 ```
@@ -50,7 +50,19 @@ You can enable it like this:
 
  framework:
 -    profiler: { collect: false }
-+    profiler: { only_exceptions: false }
++    profiler: { enabled:true, collect: true, only_exceptions: false }
+```
+
+Also add web profiler routes in `config/routes/test/web_profiler.yaml`
+
+```yaml
+web_profiler_wdt:
+    resource: '@WebProfilerBundle/Resources/config/routing/wdt.xml'
+    prefix: /_wdt
+
+web_profiler_profiler:
+    resource: '@WebProfilerBundle/Resources/config/routing/profiler.xml'
+    prefix: /_profiler
 ```
 
 ## Behat
@@ -62,6 +74,7 @@ First enable the behat extension by adding the following to your behat configura
 ```yaml
 default:
     extensions:
+        FriendsOfBehat\SymfonyExtension: ~
         Sourceability\ConsoleToolbarBundle\Behat\SymfonyToolbarExtension: ~
 ```
 
