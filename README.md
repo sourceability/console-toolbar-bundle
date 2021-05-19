@@ -1,6 +1,11 @@
 # sourceability/console-toolbar-bundle
 
-Renders the profiler toolbar in your terminal.
+Render the symfony profiler toolbar in your terminal.
+
+<img width="1375" alt="Screen Shot 2021-05-18 at 17 52 13" src="https://user-images.githubusercontent.com/611271/118683608-cf759600-b801-11eb-98b5-715df3d26452.png">
+
+Each panel links to the corresponding web profiler page.
+Make sure to use a [terminal that support hyperlinks](hyperlink_terminals) to leverage this feature.
 
 ## Installation
 
@@ -88,3 +93,5 @@ Add the following to your `phpunit.xml` configuration:
 `bin/console` now has a new global option `--toolbar`:
 
 <img width="1242" alt="Screen Shot 2021-05-18 at 18 02 22" src="https://user-images.githubusercontent.com/611271/118685271-3f385080-b803-11eb-95f0-7d68c0e96857.png">
+
+[hyperlink_terminals]: https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
