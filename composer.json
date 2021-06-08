@@ -2,7 +2,7 @@
   "name": "sourceability/console-toolbar-bundle",
   "type": "library",
   "description": "This bundle enables displaying the web toolbar in the console/terminal.",
-  "homepage": "https://github.com/sourceability/ConsoleToolbarBundle",
+  "homepage": "https://github.com/sourceability/console-toolbar-bundle",
   "license": "MIT",
   "authors": [
     {
@@ -42,7 +42,7 @@
     }
   },
   "support": {
-    "issues": "https://github.com/sourceability/ConsoleToolbarBundle/issues",
-    "source": "https://github.com/sourceability/ConsoleToolbarBundle"
+    "issues": "https://github.com/sourceability/console-toolbar-bundle/issues",
+    "source": "https://github.com/sourceability/console-toolbar-bundle"
   }
 }
