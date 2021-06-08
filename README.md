@@ -101,10 +101,21 @@ Add the following to your `phpunit.xml` configuration:
 
 ## Console
 
-- *Note that this won't work without a library we will later release.*
-
 `bin/console` now has a new global option `--toolbar`:
 
 <img width="1242" alt="Screen Shot 2021-05-18 at 18 02 22" src="https://user-images.githubusercontent.com/611271/118685271-3f385080-b803-11eb-95f0-7d68c0e96857.png">
 
+This feature requires [sourceability/instrumentation-bundle][hyperlink_terminals] with the following configuration:
+
+```yaml
+sourceability_instrumentation:
+    profilers:
+        symfony:
+            enabled: true
+    listeners:
+        command:
+            enabled: true
+```
+
 [hyperlink_terminals]: https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
+[sourceability_instrumentation_bundle]: https://github.com/sourceability/instrumentation-bundle
