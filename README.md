@@ -39,6 +39,9 @@ sourceability_console_toolbar:
             - logger
 ```
 
+If your application is not exposed at `http://localhost` exactly, make sure that
+[you've configured the router request context][symfony_doc_request_context] for your environment.
+
 By default, the profiler does not always run in the `test` environment.
 You can enable it like this:
 
@@ -119,3 +122,4 @@ sourceability_instrumentation:
 
 [hyperlink_terminals]: https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
 [sourceability_instrumentation]: https://github.com/sourceability/instrumentation
+[symfony_doc_request_context]: https://symfony.com/doc/4.4/routing.html#generating-urls-in-commands

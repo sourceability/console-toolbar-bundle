@@ -25,6 +25,8 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('base_url')
                             ->defaultValue('http://localhost')
+                            ->info('This is not used, please set the router request context instead.')
+                            ->setDeprecated()
                         ->end()
                     ->end()
                 ->end()
