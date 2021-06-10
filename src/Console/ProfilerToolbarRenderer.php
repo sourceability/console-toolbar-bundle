@@ -150,10 +150,16 @@ class ProfilerToolbarRenderer
         $panels = array_diff_key($panels, array_flip($this->hiddenPanels));
 
         foreach ($panels as $panel => $text) {
-            $panelIndex = array_search($panel, $headers, true);
+            $headerName = $panel;
+
+            if (mb_strlen($headerName) > $this->maxColumnWidth) {
+                $headerName = substr($headerName, 0, $this->maxColumnWidth - 3) . '...';
+            }
+
+            $panelIndex = array_search($headerName, $headers, true);
 
             if (false === $panelIndex) {
-                $headers[] = $panel;
+                $headers[] = $headerName;
                 $panelIndex = \count($headers) - 1;
             } else {
                 $panelIndex = (int) $panelIndex;
