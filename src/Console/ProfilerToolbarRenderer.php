@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 use function trim;
 use Twig\Environment;
 use function usort;
@@ -30,7 +30,7 @@ use function usort;
 class ProfilerToolbarRenderer
 {
     /**
-     * @var Router
+     * @var RouterInterface
      */
     private $router;
 
@@ -69,7 +69,7 @@ class ProfilerToolbarRenderer
      * @param array<string> $hiddenPanels
      */
     public function __construct(
-        Router $router,
+        RouterInterface $router,
         Profiler $profiler,
         Environment $twig,
         array $templates,
