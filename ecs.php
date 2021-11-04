@@ -3,6 +3,7 @@
 use PhpCsFixer\Fixer\ArrayNotation\ArraySyntaxFixer;
 use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
 use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
+use PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer;
 use PhpCsFixer\Fixer\Whitespace\MethodChainingIndentationFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\Spacing\MethodChainingNewlineFixer;
@@ -38,6 +39,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__,
         ],
         NotOperatorWithSuccessorSpaceFixer::class => [
+            __DIR__,
+        ],
+        DeclareStrictTypesFixer::class => [
             __DIR__,
         ],
     ]);

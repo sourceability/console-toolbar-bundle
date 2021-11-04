@@ -144,7 +144,9 @@ class ProfilerToolbarRenderer
         ];
 
         // make sure cells are aligned with headers
-        $row = array_merge($row, array_fill(0, \count($headers) - \count($originalHeaders), ''));
+        $fillCount = \count($headers) - \count($originalHeaders);
+        \assert($fillCount > 0);
+        $row = array_merge($row, array_fill(0, $fillCount, ''));
 
         $panels = $this->getWebToolbarPanels($profile);
         $panels = array_diff_key($panels, array_flip($this->hiddenPanels));

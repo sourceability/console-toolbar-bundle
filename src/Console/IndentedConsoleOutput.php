@@ -18,7 +18,7 @@ class IndentedConsoleOutput extends ConsoleOutput
         $this->spaces = $spaces;
     }
 
-    protected function doWrite(string $message, bool $newline): void
+    protected function doWrite($message, $newline)
     {
         $prependBy = str_repeat(' ', $this->spaces);
 

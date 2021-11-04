@@ -6,16 +6,24 @@ ifeq (, $(shell which -s yamllint))
 	EXEC_YAMLLINT = docker run --rm $$(tty -s && echo "-it" || echo) -v $(PWD):/data cytopia/yamllint:1.26
 endif
 
-COMPOSE_EXEC ?=
+COMPOSE_EXEC ?= docker-compose exec
 
 # Prefix any command that should be run within the fpm docker container with $(EXEC_FPM)
-EXEC_PHP = docker-compose exec php
 ifeq (, $(shell which docker-compose))
-	EXEC_PHP =
+	EXEC_PHP ?=
+else
+	EXEC_PHP ?= $(COMPOSE_EXEC) php
 endif
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+vendor:
+	$(MAKE) composer-install
+
+.PHONY: composer-install
+composer-install: ## Install PHP dependencies
+	$(EXEC_PHP) composer install --no-interaction --no-progress
 
 .PHONY: docker-sh
 docker-sh: ## Starts a bash session in the php container
@@ -30,16 +38,16 @@ yamllint: ## Lints yaml files
 	$(EXEC_YAMLLINT) -c .yamllint.yaml --strict .
 
 .PHONY: phpstan
-phpstan: ## Static analysis
-	$(EXEC_PHP) phpstan
+phpstan: vendor ## Static analysis
+	$(EXEC_PHP) ./vendor/bin/phpstan
 
 .PHONY: cs
-cs: ## Coding standards check
-	$(EXEC_PHP) ecs check
+cs: vendor ## Coding standards check
+	$(EXEC_PHP) ./vendor/bin/ecs check
 
 .PHONY: cs
-cs-fix: ## Coding standards fix
-	$(EXEC_PHP) ecs check --fix
+cs-fix: vendor ## Coding standards fix
+	$(EXEC_PHP) ./vendor/bin/ecs check --fix
 
 .PHONY: all
-all: phpstan yamllint cs ## Runs all test/lint targets
+all: phpstan yamllint cs phpunit ## Runs all test/lint targets
