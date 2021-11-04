@@ -1,0 +1,56 @@
+name: Checks
+
+on:
+    pull_request:
+    push:
+        branches:
+            - main
+
+jobs:
+    checks:
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php_version:
+                    - '7.1'
+                    - '7.2'
+                    - '7.3'
+                    - '7.4'
+                    - '8.0'
+                symfony_version:
+                    - '4.4'
+                    - '5.0'
+                    - '5.1'
+                    - '5.2'
+                    - '5.3'
+
+        name: "PHP ${{ matrix.php_version }} - Symfony ${{ matrix.symfony_version }}"
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php_version }}
+                    coverage: none
+
+            # See https://github.com/actions/cache/blob/main/examples.md#php---composer
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "::set-output name=dir::$(composer config cache-files-dir)"
+            -   uses: actions/cache@v2
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-php${{ matrix.php_version }}-symfony${{ matrix.symfony_version }}-composer-${{ hashFiles('**/composer.json') }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-
+
+            -   name: "Install dependencies"
+                run: SYMFONY_REQUIRE='${{ matrix.symfony_version }}.*' composer update ${{ matrix.composer-flags }} --prefer-dist --prefer-dist
+
+            -   run: vendor/bin/phpstan
+            -   run: vendor/bin/ecs check
