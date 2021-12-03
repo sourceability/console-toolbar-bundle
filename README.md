@@ -31,7 +31,6 @@ Configure the bundle in `config/packages/{dev,test}/sourceability_console_toolba
 ```yaml
 sourceability_console_toolbar:
     toolbar:
-        base_url: http://localhost:8200/ # for the iTerm2 hyperlinks
         hidden_panels:
             - config
             - form
