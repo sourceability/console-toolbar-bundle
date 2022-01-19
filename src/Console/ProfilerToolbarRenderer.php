@@ -12,6 +12,7 @@ use function mb_strlen;
 use function parse_str;
 use function parse_url;
 use function preg_replace;
+use Sourceability\ConsoleToolbarBundle\Console\Model\ToolbarCell;
 use function sprintf;
 use Symfony\Bundle\WebProfilerBundle\Profiler\TemplateManager;
 use Symfony\Component\Console\Helper\Table;
@@ -148,10 +149,10 @@ class ProfilerToolbarRenderer
         \assert($fillCount >= 0);
         $row = array_merge($row, array_fill(0, $fillCount, ''));
 
-        $panels = $this->getWebToolbarPanels($profile);
-        $panels = array_diff_key($panels, array_flip($this->hiddenPanels));
+        $toolbarCells = $this->getWebToolbarCells($profile);
+        $toolbarCells = array_diff_key($toolbarCells, array_flip($this->hiddenPanels));
 
-        foreach ($panels as $panel => $text) {
+        foreach ($toolbarCells as $panel => $toolbarCell) {
             $headerName = $panel;
 
             if (mb_strlen($headerName) > $this->maxColumnWidth) {
@@ -167,16 +168,20 @@ class ProfilerToolbarRenderer
                 $panelIndex = (int) $panelIndex;
             }
 
-            $row[$panelIndex] = $this->link($text, sprintf('%s?panel=%s', $webProfilerUrl, $panel));
+            $row[$panelIndex] = $this->link(
+                $toolbarCell->getText(),
+                sprintf('%s?panel=%s', $webProfilerUrl, $panel),
+                $toolbarCell->getColor()
+            );
         }
 
         return $row;
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, ToolbarCell>
      */
-    private function getWebToolbarPanels(Profile $profile): array
+    private function getWebToolbarCells(Profile $profile): array
     {
         $templateManager = new TemplateManager($this->profiler, $this->twig, $this->templates);
 
@@ -230,19 +235,36 @@ class ProfilerToolbarRenderer
                 continue;
             }
 
-            $panels[$panel] = $this->removeWhiteSpaces($toolbarBlock->filter('.sf-toolbar-icon')->text());
+            $matches = [];
+            preg_match('#sf-toolbar-status-(?P<color>[a-zA-Z]+)#', $toolbarBlock->html(), $matches);
+            $color = $matches['color'] ?? null;
+
+            $panels[$panel] = new ToolbarCell(
+                $this->removeWhiteSpaces($toolbarBlock->filter('.sf-toolbar-icon')->text()),
+                $color
+            );
         }
 
         return $panels;
     }
 
-    private function link(string $text, string $url): string
+    private function link(string $text, string $url, ?string $color = null): string
     {
-        if (mb_strlen($text) > $this->maxColumnWidth) {
+        $parts = [];
+
+        if (mb_strlen($text) <= $this->maxColumnWidth) {
+            $parts[] = sprintf('href=%s', $url);
+        }
+
+        if (null !== $color) {
+            $parts[] = sprintf('fg=%s', $color);
+        }
+
+        if (\count($parts) < 1) {
             return $text;
         }
 
-        return sprintf('<href=%s>%s</>', $url, $text);
+        return sprintf('<%s>%s</>', implode(';', $parts), $text);
     }
 
     private function urlRemoveBeforePath(string $url): string
