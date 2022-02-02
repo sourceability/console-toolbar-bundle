@@ -195,6 +195,7 @@ class ProfilerToolbarRenderer
             // 1 = original toolbar, 2 = Symfony 2.8+ toolbar
             'csp_script_nonce' => null,
             'csp_style_nonce' => null,
+            'full_stack' => class_exists('Symfony\Bundle\FullStack'),
         ]);
 
         $crawler = new Crawler();
