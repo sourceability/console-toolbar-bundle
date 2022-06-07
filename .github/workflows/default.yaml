@@ -1,7 +1,7 @@
 name: Checks
 
-on:
-    pull_request:
+on: # yamllint disable-line rule:truthy
+    pull_request: ~
     push:
         branches:
             - main
@@ -14,19 +14,21 @@ jobs:
             fail-fast: false
             matrix:
                 php_version:
-                    - '7.1'
                     - '7.2'
                     - '7.3'
                     - '7.4'
                     - '8.0'
+                    - '8.1'
                 symfony_version:
                     - '4.4'
                     - '5.0'
                     - '5.1'
                     - '5.2'
                     - '5.3'
+                    - '6.0'
+                    - '6.1'
 
-        name: "PHP ${{ matrix.php_version }} - Symfony ${{ matrix.symfony_version }}"
+        name: 'PHP ${{ matrix.php_version }} - Symfony ${{ matrix.symfony_version }}'
 
         steps:
             -   uses: actions/checkout@v2
@@ -49,7 +51,7 @@ jobs:
                     restore-keys: |
                         ${{ runner.os }}-composer-
 
-            -   name: "Install dependencies"
+            -   name: 'Install dependencies'
                 run: SYMFONY_REQUIRE='${{ matrix.symfony_version }}.*' composer update ${{ matrix.composer-flags }} --prefer-dist --prefer-dist
 
             -   run: vendor/bin/phpstan

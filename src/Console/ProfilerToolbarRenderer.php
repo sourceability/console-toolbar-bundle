@@ -135,6 +135,9 @@ class ProfilerToolbarRenderer
     }
 
     /**
+     * @param array<string|int, string> $headers
+     * @param array<string|int, string> $originalHeaders
+     *
      * @return array<int, string>
      */
     private function renderRow(Profile $profile, string $webProfilerUrl, array &$headers, array $originalHeaders): array
