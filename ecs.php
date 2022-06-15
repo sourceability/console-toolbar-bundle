@@ -5,30 +5,30 @@ use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
 use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
 use PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer;
 use PhpCsFixer\Fixer\Whitespace\MethodChainingIndentationFixer;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\Spacing\MethodChainingNewlineFixer;
-use Symplify\EasyCodingStandard\ValueObject\Option;
+use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-    $services->set(ArraySyntaxFixer::class)
-        ->call('configure', [[
-            'syntax' => 'short',
-        ]]);
+return static function (ECSConfig $ecsConfig): void {
+    $ecsConfig->ruleWithConfiguration(ArraySyntaxFixer::class, [
+        'syntax' => 'short',
+    ]);
 
-    $containerConfigurator->import(SetList::PSR_12);
-    $containerConfigurator->import(SetList::PHP_CS_FIXER);
-    $containerConfigurator->import(SetList::PHP_CS_FIXER_RISKY);
-    $containerConfigurator->import(SetList::SYMPLIFY);
-    $containerConfigurator->import(SetList::SYMFONY);
-    $containerConfigurator->import(SetList::SYMFONY_RISKY);
-    $containerConfigurator->import(SetList::COMMON);
-    $containerConfigurator->import(SetList::CLEAN_CODE);
+    $ecsConfig->import(SetList::PSR_12);
+    $ecsConfig->import(SetList::PHP_CS_FIXER);
+    $ecsConfig->import(SetList::PHP_CS_FIXER_RISKY);
+    $ecsConfig->import(SetList::SYMPLIFY);
+    $ecsConfig->import(SetList::SYMFONY);
+    $ecsConfig->import(SetList::SYMFONY_RISKY);
+    $ecsConfig->import(SetList::COMMON);
+    $ecsConfig->import(SetList::CLEAN_CODE);
 
-    $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::PATHS, [__DIR__ . '/src', __DIR__ . '/tests']);
-    $parameters->set(Option::SKIP, [
+    $ecsConfig->paths([
+        __DIR__ . '/src',
+        __DIR__ . '/tests'
+    ]);
+
+    $ecsConfig->skip([
         MethodChainingIndentationFixer::class => [
             __DIR__ . '/src/DependencyInjection/Configuration.php',
         ],

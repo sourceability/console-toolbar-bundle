@@ -43,7 +43,7 @@ rules:
         forbid-in-block-mappings: true
         forbid-in-flow-mappings: true
     hyphens:
-        max-spaces-after: 2
+        max-spaces-after: 3
     key-duplicates: 'enable'
     key-ordering: 'disable'
     line-length: 'disable'
@@ -54,6 +54,7 @@ rules:
         forbid-implicit-octal: true
     quoted-strings:
         quote-type: 'single'
+        required: false
     trailing-spaces: 'enable'
     truthy:
         allowed-values:

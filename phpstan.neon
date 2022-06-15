@@ -11,7 +11,6 @@ parameters:
 
     ignoreErrors:
         - '#Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::#'
-        - '#Method Sourceability\\ConsoleToolbarBundle\\Console\\IndentedConsoleOutput::doWrite\(\) .+typehint specified#'
 
 includes:
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon

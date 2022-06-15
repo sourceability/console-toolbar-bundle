@@ -31,6 +31,9 @@ class SymfonyToolbarExtension implements ExtensionInterface
     {
     }
 
+    /**
+     * @param array<mixed> $config
+     */
     public function load(ContainerBuilder $container, array $config): void
     {
         $definition = new Definition(ProfilerToolbarListener::class, [new Reference(SymfonyExtension::KERNEL_ID)]);
