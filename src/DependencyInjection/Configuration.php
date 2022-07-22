@@ -26,7 +26,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('base_url')
                             ->defaultValue('http://localhost')
                             ->info('This is not used, please set the router request context instead.')
-                            ->setDeprecated()
+                            ->setDeprecated('sourceability/console-toolbar-bundle', '0.1.3')
                         ->end()
                     ->end()
                 ->end()
