@@ -47,7 +47,7 @@ class ConsoleToolbarListener implements EventSubscriberInterface
     {
         return [
             ConsoleEvents::COMMAND => 'onCommand',
-            ConsoleEvents::TERMINATE => 'onTerminate',
+            ConsoleEvents::TERMINATE => ['onTerminate', -1024],
         ];
     }
 
