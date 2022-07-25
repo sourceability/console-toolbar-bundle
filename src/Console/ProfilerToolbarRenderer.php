@@ -242,6 +242,10 @@ class ProfilerToolbarRenderer
             $matches = [];
             preg_match('#sf-toolbar-status-(?P<color>[a-zA-Z]+)#', $toolbarBlock->html(), $matches);
             $color = $matches['color'] ?? null;
+            
+            if ('grey' === $color) {
+                $color = 'default';
+            }
 
             $panels[$panel] = new ToolbarCell(
                 $this->removeWhiteSpaces($toolbarBlock->filter('.sf-toolbar-icon')->text()),
