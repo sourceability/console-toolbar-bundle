@@ -30,6 +30,18 @@ use function usort;
 
 class ProfilerToolbarRenderer
 {
+    private const VALID_COLORS = [
+        'black',
+        'red',
+        'green',
+        'yellow',
+        'blue',
+        'magenta',
+        'cyan',
+        'white',
+        'default',
+    ];
+
     /**
      * @var RouterInterface
      */
@@ -243,7 +255,7 @@ class ProfilerToolbarRenderer
             preg_match('#sf-toolbar-status-(?P<color>[a-zA-Z]+)#', $toolbarBlock->html(), $matches);
             $color = $matches['color'] ?? null;
 
-            if ('grey' === $color) {
+            if (!\in_array($color, self::VALID_COLORS, true)) {
                 $color = 'default';
             }
 
