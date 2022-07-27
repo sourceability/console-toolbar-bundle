@@ -86,7 +86,7 @@ class ConsoleToolbarListener implements EventSubscriberInterface
         $input = $event->getInput();
         $output = $event->getOutput();
 
-        $displayToolbar = (bool) $input->getOption('toolbar');
+        $displayToolbar = $input->hasOption('toolbar') && (bool) $input->getOption('toolbar');
 
         if (!$displayToolbar) {
             return;
