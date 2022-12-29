@@ -14,11 +14,15 @@ class SourceabilityConsoleToolbarExtension extends ConfigurableExtension
      */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void
     {
+        /** @var array{toolbar: array{enabled: bool, hidden_panels: array<mixed>, max_column_width: int}} $mergedConfig */
+        $toolbar = $mergedConfig['toolbar'];
+
+        if (!$toolbar['enabled']) {
+            return;
+        }
+
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
-
-        /** @var array{hidden_panels: array<mixed>, max_column_width: int} $toolbar */
-        $toolbar = $mergedConfig['toolbar'];
 
         $container
             ->getDefinition('sourceability.console_toolbar.console.profiler_toolbar_renderer')
