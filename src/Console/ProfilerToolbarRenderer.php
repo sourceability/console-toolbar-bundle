@@ -244,7 +244,10 @@ class ProfilerToolbarRenderer
 
             parse_str($parsedUrl['query'], $query);
 
-            $panel = (string) $query['panel'];
+            $panel = $query['panel'];
+            if (!\is_string($panel)) {
+                continue;
+            }
 
             if (\array_key_exists($panel, $panels)) {
                 // time has 2 "blocks", so let's no override response time with peak memory
