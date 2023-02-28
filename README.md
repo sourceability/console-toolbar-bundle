@@ -107,7 +107,7 @@ Add the following to your `phpunit.xml` configuration:
 
 <img width="1242" alt="Screen Shot 2021-05-18 at 18 02 22" src="https://user-images.githubusercontent.com/611271/118685271-3f385080-b803-11eb-95f0-7d68c0e96857.png">
 
-This feature requires [sourceability/instrumentation](https://github.com/sourceability/instrumentation) with the following bundle configuration:
+This feature requires [sourceability/instrumentation][sourceability_instrumentation] with the following bundle configuration:
 
 ```yaml
 sourceability_instrumentation:
